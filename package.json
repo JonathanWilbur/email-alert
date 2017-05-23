@@ -1,0 +1,31 @@
+{
+  "name": "email-alert",
+  "version": "1.0.0",
+  "description": "A configurables email alert and notifier objects for administrators",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Email",
+    "Alert",
+    "Mail",
+    "Notification",
+    "Notifier"
+  ],
+  "author": "Jonathan M. Wilbur jonathan@wilbur.space",
+  "license": "ISC",
+  "dependencies": {
+    "email": "^0.2.6",
+    "escape-html": "^1.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JonathanWilbur/email-alert.git"
+  },
+  "os": [
+    "linux",
+    "darwin",
+    "!win32"
+  ]
+}
