@@ -73,7 +73,12 @@ which speak for themselves:
     // The length of time (in seconds) between which notification emails are sent
     // Note that no notification email is sent if there are no notifications.
     // Also note that this setting only applies to EmailNotifier.
-    notificationIntervalSeconds: 30
+    // Defaults to one hour (3600000 milliseconds)
+    notificationInterval: 30,
+
+    // The file path where sendmail can be found
+    // Defaults to just "sendmail" and lets the shell do the digging.
+    sendmailPath: "/usr/bin/sendmail"
 }
 ```
 
@@ -103,6 +108,13 @@ emailNotifier.notify("Backup taken at 4:04.");
 emailNotifier.notify("Coffee is done brewing.");
 
 ```
+
+## Todo
+
+- [ ] Implement getters for all settings
+- [ ] *Maybe* implement setters for all settings
+- [ ] Implement assert.throws() tests
+- [ ] Implement assert.doesNotThrow() tests
 
 ## Bugs
 

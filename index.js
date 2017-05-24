@@ -17,16 +17,19 @@ module.exports = {
 
         // REVIEW: I don't actually know if this will work on Mac OS.
         assert.ok(os.type() == "Linux" || os.type() == "Darwin", "EmailAlert module only works on Linux or Mac OS.");
+
         validateOptionTypes(options, "EmailNotifier");
         validateOptionLengths(options, "EmailNotifier");
+        validateOptionKeys(options, validNotifierOptionKeys);
         validateEmailAddresses(options, "EmailNotifier");
+        validatePaths(options, "EmailNotifier");
 
         var notificationBuffer = [];
 
         var notificationInterval = setInterval(function () { 
             if (notificationBuffer.length > 0) sendEmail();
             notificationBuffer = [];
-        }, options.notificationIntervalSeconds * 1000 || 3600000);
+        }, options.notificationInterval * 1000 || 3600000);
 
         /**
          * This is the main function for appending notifications to the next email.
@@ -83,7 +86,9 @@ module.exports = {
         assert(os.type() == "Linux" || os.type() == "Darwin", "EmailAlert module only works on Linux or Mac OS.");
         validateOptionTypes(options, "EmailAlerter");
         validateOptionLengths(options, "EmailAlerter");
+        validateOptionKeys(options, validAlerterOptionKeys);
         validateEmailAddresses(options, "EmailAlerter");
+        validatePaths(options, "EmailAlerter");
 
         this.alert = function (message) {
             (new Email({
@@ -154,8 +159,8 @@ function validateOptionTypes (options, type) {
     )
         throw Error(type + ".bcc must be an array of strings.");
 
-    if (options.notificationIntervalSeconds && typeof(options.notificationIntervalSeconds) != "number")
-        throw Error(type + ".notificationIntervalSeconds must be a number.");
+    if (options.notificationInterval && typeof(options.notificationInterval) != "number")
+        throw Error(type + ".notificationInterval must be a number.");
 
     if (options.subject && typeof(options.subject) != "string")
         throw Error(type + ".header must be a string.");
@@ -225,4 +230,34 @@ function validateEmailAddress (address) {
         parts[0].length <= 64 &&
         parts[1].split(".").every(function (dc) { return (dc.length <= 63); })
     );
+}
+
+function validatePaths (options, type) {
+
+    if (options.sendmailPath && !validatePath(options.path))
+        throw Error(type + ".sendmailPath is not a valid Unix path.");
+
+}
+
+function validatePath (path) {
+    var pathParts = path.split("/");
+    return (
+        pathParts.length > 0 &&
+        pathParts.every(function (part) { return (part.length < 255); }) &&
+        pathParts.every(function (part) { return (part.indexOf("\x00") == -1); })
+    );
+}
+
+const validAlerterOptionKeys =
+    [ "from", "replyTo", "to", "cc", "bcc", "subject", "html", "header",
+    "footer", "sendmailPath" ];
+
+const validNotifierOptionKeys = 
+    [ "from", "replyTo", "to", "cc", "bcc", "subject", "html", "header",
+    "footer", "sendmailPath", "notificationInterval" ];
+
+function validateOptionKeys (options, acceptableKeys) {
+    return Object.keys(options).every(function (key) {
+        return (acceptableKeys.indexOf(key) != -1);
+    });
 }

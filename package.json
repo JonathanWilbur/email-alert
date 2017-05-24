@@ -27,5 +27,9 @@
     "linux",
     "darwin",
     "!win32"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/JonathanWilbur/email-alert/issues",
+    "email": "jonathan@wilbur.space"
+  }
 }
